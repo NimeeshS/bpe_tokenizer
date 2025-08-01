@@ -1,2 +1,3 @@
 bpe_merges.json
-sources.txt
+source.txt
+/__pycache__/

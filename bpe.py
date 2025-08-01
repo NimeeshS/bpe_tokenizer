@@ -154,8 +154,6 @@ class BPETokenizer:
         Encode text and draw merge trees for each resulting token.
         """
         tokens = self.encode(text)
-        print(f"Text: {text}")
-        print(f"Tokens: {tokens}")
         for token in tokens:
             print(f"\nTree for token {token}:")
             self.draw_merge_tree(token)
