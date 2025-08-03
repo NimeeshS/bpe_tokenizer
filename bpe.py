@@ -157,3 +157,11 @@ class BPETokenizer:
         for token in tokens:
             print(f"\nTree for token {token}:")
             self.draw_merge_tree(token)
+
+    def list_tokens(self):
+        for pair, new_id in self.merges:
+            try:
+                decoded_str = bytes(self._decode_token_to_bytes(new_id)).decode('utf-8')
+            except UnicodeDecodeError:
+                decoded_str = "�"
+            print(f'"{decoded_str}"')

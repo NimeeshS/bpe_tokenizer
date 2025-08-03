@@ -16,6 +16,7 @@ def main():
     tokenizer.compression_rate(text)
     tokenizer.visualize_tokens(text)
     tokenizer.visualize_merge_trees(text)
+    tokenizer.list_tokens()
 
 if __name__ == "__main__":
     main()
