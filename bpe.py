@@ -8,6 +8,7 @@ class BPETokenizer:
         self.next_id = 256
         self.merge_ranks = {}
         self.id_to_pair = {}
+        self.encoded_tokens = []
 
     def train(self, text, vocab_size=512):
         tokens = list(text.encode('utf-8'))
@@ -38,6 +39,8 @@ class BPETokenizer:
             best_pair = min(candidates, key=lambda x: x[1])[0]
             new_id = dict(self.merges)[best_pair]
             tokens = self._merge_tokens(tokens, best_pair, new_id)
+        
+        self.encoded_tokens = tokens
         return tokens
 
     def decode(self, tokens):
@@ -98,20 +101,24 @@ class BPETokenizer:
     
     def compression_rate(self, text):
         original_bytes = len(text.encode('utf-8'))
-        tokens = self.encode(text)
-        compressed_tokens = len(tokens)
+        compressed_tokens = len(self.encoded_tokens)
         ratio = original_bytes / compressed_tokens if compressed_tokens else 0
         print(f"Original bytes: {original_bytes}")
         print(f"Compressed tokens: {compressed_tokens}")
         print(f"Compression ratio (bytes per token): {ratio:.2f}")
         return ratio
     
-    def visualize_tokens(self, text):
+    def visualize_tokens(self, text=None):
         """
         Visualize how text splits into tokens after encoding.
         Shows each token as the characters it represents.
         """
-        tokens = self.encode(text)
+        if self.encoded_tokens == []:
+            raise ValueError("No tokens encoded yet. Please encode text first.")
+        if text is None:
+            tokens = self.encoded_tokens
+        else:
+            tokens = self.encode(tokens)
         parts = []
         for token in tokens:
             decoded_bytes = self._decode_token_to_bytes(token)
@@ -149,11 +156,16 @@ class BPETokenizer:
                 self.draw_merge_tree(left, prefix + "├── ")
                 self.draw_merge_tree(right, prefix + "└── ")
 
-    def visualize_merge_trees(self, text):
+    def visualize_merge_trees(self, text=None):
         """
         Encode text and draw merge trees for each resulting token.
         """
-        tokens = self.encode(text)
+        if self.encoded_tokens == []:
+            raise ValueError("No tokens encoded yet. Please encode text first.")
+        if text is None:
+            tokens = self.encoded_tokens
+        else:
+            tokens = self.encode(text)
         for token in tokens:
             print(f"\nTree for token {token}:")
             self.draw_merge_tree(token)

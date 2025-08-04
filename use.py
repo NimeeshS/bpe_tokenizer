@@ -6,7 +6,6 @@ def main():
 
     tokenizer = BPETokenizer()
     tokenizer.load('bpe_merges.json')
-
     tokens = tokenizer.encode(text)
     print("Encoded tokens:", tokens[:10])
 
@@ -14,8 +13,8 @@ def main():
     print("Decoded text matches original:", decoded == text)
 
     tokenizer.compression_rate(text)
-    tokenizer.visualize_tokens(text)
-    tokenizer.visualize_merge_trees(text)
+    tokenizer.visualize_tokens()
+    tokenizer.visualize_merge_trees()
     tokenizer.list_tokens()
 
 if __name__ == "__main__":
